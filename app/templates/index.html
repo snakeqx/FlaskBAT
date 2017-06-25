@@ -5,7 +5,28 @@
 {% block content %}
 <div class="container">
     <div class="page-header">
-        <h1>This is a test of home page. In the future, the page will show some basic information.</h1>
+            <table class="table">
+                <tr>
+                    <th><div>{{ form.Select_KV(id="select_kv") }}</div></th>
+                    <th><div>{{ form.Select_Current(id="select_current") }}</div></th>
+                    <th><div><button type="button" id="button1">Click me</button></div></th>
+                </tr>
+            </table>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+
+<script type=text/javascript src="{{
+  url_for('static', filename='jquery-3.2.1.min.js') }}"></script>
+<script>
+$(document).ready(function(){
+    $("#select_kv").click(function(){
+        $(this).hide();
+        alert(this)
+    });
+});
+</script>
+
 {% endblock %}

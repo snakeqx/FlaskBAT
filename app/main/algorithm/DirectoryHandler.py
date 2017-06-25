@@ -1,7 +1,7 @@
 #!coding=utf8
-import logging
 import os
 import dicom
+import logging
 
 
 class DirectoryHandler:
@@ -10,9 +10,8 @@ class DirectoryHandler:
     And store each found file full path in a list of string "Database_File_Path"
     """
     Dicom_File_Path = []
+    Total_Dicom_Quantity = 0
     Log_Record = []
-    Directory_Iterate = 1
-    Tree_indicator = "|---"
 
     def __init__(self, input_directory):
         """
@@ -38,17 +37,14 @@ class DirectoryHandler:
             if os.path.isfile(full_dl):
                 try:
                     # try to open the dicom file.
-                    dicom.read_file(full_dl)
+                    _ = dicom.read_file(full_dl)[0x0018, 0x1000].value
                     self.Dicom_File_Path.append(full_dl)
-                    self.Log_Record.append(self.Directory_Iterate*self.Tree_indicator + str(dl))
+                    self.Total_Dicom_Quantity += 1
+                    self.Log_Record.append(str(full_dl))
                 except Exception as e:
-                    # if it is not a dicom file, skip saving to Dicom_File_Path
-                    self.Log_Record.append(self.Directory_Iterate*self.Tree_indicator + str(dl) + r"不是DICOM文件！")
+                    logging.error(str(e))
             else:
-                self.Log_Record.append(self.Directory_Iterate*self.Tree_indicator + str(dl) + r"\\")
-                self.Directory_Iterate += 1
                 self.list_files(full_dl)
-        self.Directory_Iterate -= 1
 
 
 if __name__ == '__main__':
